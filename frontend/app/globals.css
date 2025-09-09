@@ -1,0 +1,19 @@
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #d1e7ff;
+}
+
+.layout-container {
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #d1e7ff;
+}
