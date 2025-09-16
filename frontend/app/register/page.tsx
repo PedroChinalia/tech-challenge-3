@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { VerticalAlignTop } from "@mui/icons-material";
 
 const Register: React.FC = () => {
   const [name, setName] = useState("");
