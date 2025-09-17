@@ -6,6 +6,7 @@ export function useAuth() {
     const router = useRouter();
     const [profile, setProfile] = useState<any>(null);
     const [token, setToken] = useState<string | null>(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const storedProfile = localStorage.getItem("profile");
@@ -18,6 +19,7 @@ export function useAuth() {
         if (storedToken) {
             setToken(storedToken);
         }
+        setLoading(false);
     }, []);
 
     const fetchProfile = async (token: string) => {
@@ -42,6 +44,7 @@ export function useAuth() {
         isTeacher: profile?.is_teacher ?? false,
         profile,
         token,
+        loading,
         fetchProfile,
         logout
     };
