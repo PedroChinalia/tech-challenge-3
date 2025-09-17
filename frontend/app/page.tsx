@@ -3,19 +3,38 @@ import Post from "./components/post";
 import Navbar from "./components/navbar";
 import { Typography, Box, Button } from "@mui/material";
 import { useAuth } from "./hooks/useAuth";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import axios from "axios";
+
+interface PostData {
+  id: number;
+  title: string;
+  content: string;
+  author: string;
+  created_at: string;
+}
 
 export default function Home() {
-  const testProps = {
-    id: 1,
-    title: "Test Title",
-    content:
-      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
-    author: "Pedro Chinalia",
-    date: "09/09/2025"
+  const [data, setData] = useState<PostData[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const handleGetPosts = async () => {
+    try {
+      const res = await axios.get("https://tech-challenge-blog.onrender.com/posts/");
+      setData(res.data);
+    } catch (error) {
+      console.error("Erro ao buscar os posts:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const { isAuthenticated, isTeacher } = useAuth();
+  useEffect(() => {
+    handleGetPosts();
+  }, []);
+
+  const { isTeacher } = useAuth();
 
   return (
     <>
@@ -42,20 +61,23 @@ export default function Home() {
               Criar Postagem
             </Button>
           </Box>
-          <Post
-            id={testProps.id}
-            title={testProps.title}
-            content={testProps.content}
-            author={testProps.author}
-            date={testProps.date}
-          />
-          <Post
-            id={testProps.id}
-            title={testProps.title}
-            content={testProps.content}
-            author={testProps.author}
-            date={testProps.date}
-          />
+          <div>
+            {loading ? (
+              <Typography>Carregando posts...</Typography>
+            ) : data.length > 0 ? (
+              data.map((card) => (
+                <Post
+                  key={card.id}
+                  id={card.id}
+                  title={card.title}
+                  content={card.content}
+                  author={card.author}
+                  date={card.created_at.split('T')[0]} />
+              ))
+            ) : (
+              <Typography>Nenhum post encontrado.</Typography>
+            )}
+          </div>
         </div>
       </div>
     </>
