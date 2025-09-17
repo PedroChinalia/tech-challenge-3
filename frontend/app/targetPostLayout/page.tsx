@@ -9,6 +9,10 @@ import Link from "next/link";
 const TargetPostLayout: React.FC = () => {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
+  const title = searchParams.get("title") || "";
+  const content = searchParams.get("content") || "";
+  const author = searchParams.get("author") || "";
+  const date = searchParams.get("date") || "";
 
   return (
     <>
@@ -25,24 +29,21 @@ const TargetPostLayout: React.FC = () => {
                 <ArrowBackIcon titleAccess="Voltar" />
               </IconButton>
               <Typography variant="h6" mb={2} mt={2}>
-                Test Title
+                {title}
               </Typography>
               {/* Card body */}
               <Typography mb={2}>
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-                Ipsum has been the industry's standard dummy text ever since the 1500s, when an
-                unknown printer took a galley of type and scrambled it to make a type specimen
-                book.f
+                {content}
               </Typography>
               <Typography mb={1}>
-                <strong>Autor:</strong> Pedro Chinalia
+                <strong>Autor:</strong> {author}
               </Typography>
               <Typography mb={1}>
-                <strong>Data de criação:</strong> 07/09/2025
+                <strong>Data de criação:</strong> {date}
               </Typography>
-              <Typography mb={1}>
+              {/* <Typography mb={1}>
                 <strong>Última atualização:</strong> 07/09/2025
-              </Typography>
+              </Typography> */}
             </CardContent>
           </Card>
         </div>

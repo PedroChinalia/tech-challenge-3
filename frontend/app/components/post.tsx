@@ -38,7 +38,7 @@ const Post: React.FC<PostProps> = (props) => {
             <IconButton
               aria-label="see-post"
               component={Link}
-              href={{ pathname: "/targetPostLayout", query: { id } }}
+              href={{ pathname: "/targetPostLayout", query: { id, title, content, author, date } }}
             >
               <VisibilityIcon titleAccess="Ver postagem" />
             </IconButton>
