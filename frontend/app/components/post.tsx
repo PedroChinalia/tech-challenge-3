@@ -7,6 +7,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import Link from "next/link";
 import { useState } from "react";
 import CustomDialog from "./dialog";
+import { useAuth } from "../hooks/useAuth";
 
 type PostProps = {
   id: number;
@@ -25,11 +26,13 @@ const Post: React.FC<PostProps> = (props) => {
   const handleOpenDialog = () => setDialogIsOpen(true);
   const handleCloseDialog = () => setDialogIsOpen(false);
 
+  const { isTeacher } = useAuth();
+
   return (
     <Card sx={{ marginTop: 2, marginBottom: 2, width: "50vw", padding: 2 }}>
       <CardContent>
         {/* Card header */}
-        <Box sx={{ display: "flex", justifyContent: "space-between", marginBottom: 2 }}>
+        <Box sx={{ display: isTeacher ? "flex" : "none", justifyContent: "space-between", marginBottom: 2 }}>
           <Typography variant="h6">{title}</Typography>
           <Box>
             <IconButton
