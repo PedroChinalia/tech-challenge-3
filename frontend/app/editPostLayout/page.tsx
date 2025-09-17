@@ -1,13 +1,60 @@
 "use client";
 
 import Navbar from "../components/navbar";
-import { Box, TextField, Typography, Button } from "@mui/material";
+import { Box, TextField, Typography, Button, Snackbar, Alert, AlertColor } from "@mui/material";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { useState } from "react";
+import { useAuth } from "../hooks/useAuth";
+import axios from "axios";
 
 const EditPostLayout: React.FC = () => {
   const searchParams = useSearchParams();
+  const { profile, token, isTeacher } = useAuth();
+  const autor = profile?.name;
+  const autorId = profile?.id;
+
   const id = searchParams.get("id");
+  const initialTitle = searchParams.get("title") || "";
+  const initialContent = searchParams.get("content") || "";
+
+  const [title, setTitle] = useState(initialTitle);
+  const [content, setContent] = useState(initialContent);
+
+  const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: AlertColor }>({
+    open: false,
+    message: '',
+    severity: 'info',
+  });
+  const handleCloseSnackbar = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbar({ ...snackbar, open: false });
+  };
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    try {
+      await axios.put(`https://tech-challenge-blog.onrender.com/posts/${id}`, {
+        title: title,
+        content: content,
+        author: autor,
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+      });
+
+      setSnackbar({ open: true, message: "Post atualizado com sucesso!", severity: 'success' });
+
+
+    } catch (error) {
+      console.error("Erro ao realizar atualização do post:", error);
+      setSnackbar({ open: true, message: "Ops! Erro ao atualizar o post. Tente novamente.", severity: 'error' });
+    }
+  };
 
   return (
     <>
@@ -23,10 +70,10 @@ const EditPostLayout: React.FC = () => {
               p: 3,
               borderRadius: 2,
               boxShadow: 3,
-              width: "50vw"
+              width: "50vw",
             }}
           >
-            <form>
+            <form onSubmit={handleSubmit}>
               <Box sx={{ marginBottom: 2 }}>
                 <TextField
                   id="post-title"
@@ -35,6 +82,8 @@ const EditPostLayout: React.FC = () => {
                   type="text"
                   required
                   fullWidth
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
                 />
               </Box>
               <Box sx={{ marginBottom: 3 }}>
@@ -45,6 +94,8 @@ const EditPostLayout: React.FC = () => {
                   rows={4}
                   required
                   fullWidth
+                  value={content}
+                  onChange={(e) => setContent(e.target.value)}
                 />
               </Box>
               <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -58,6 +109,11 @@ const EditPostLayout: React.FC = () => {
             </form>
           </Box>
         </div>
+        <Snackbar open={snackbar.open} autoHideDuration={6000} onClose={handleCloseSnackbar} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+          <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: '100%' }}>
+            {snackbar.message}
+          </Alert>
+        </Snackbar>
       </div>
     </>
   );

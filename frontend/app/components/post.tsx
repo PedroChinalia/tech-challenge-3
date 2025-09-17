@@ -46,7 +46,7 @@ const Post: React.FC<PostProps> = (props) => {
               aria-label="edit-post"
               component={Link}
               disabled={!isTeacher}
-              href={{ pathname: "/editPostLayout", query: { id } }}
+              href={{ pathname: "/editPostLayout", query: { id, title, content } }}
             >
               <EditIcon titleAccess="Editar postagem" />
             </IconButton>
