@@ -32,7 +32,7 @@ const Post: React.FC<PostProps> = (props) => {
     <Card sx={{ marginTop: 2, marginBottom: 2, width: "50vw", padding: 2 }}>
       <CardContent>
         {/* Card header */}
-        <Box sx={{ display: isTeacher ? "flex" : "none", justifyContent: "space-between", marginBottom: 2 }}>
+        <Box sx={{ display: "flex", justifyContent: "space-between", marginBottom: 2 }}>
           <Typography variant="h6">{title}</Typography>
           <Box>
             <IconButton
@@ -45,11 +45,12 @@ const Post: React.FC<PostProps> = (props) => {
             <IconButton
               aria-label="edit-post"
               component={Link}
+              disabled={!isTeacher}
               href={{ pathname: "/editPostLayout", query: { id } }}
             >
               <EditIcon titleAccess="Editar postagem" />
             </IconButton>
-            <IconButton aria-label="delete-post" onClick={handleOpenDialog}>
+            <IconButton aria-label="delete-post" onClick={handleOpenDialog} disabled={!isTeacher}>
               <DeleteIcon titleAccess="Excluir postagem" />
             </IconButton>
           </Box>
