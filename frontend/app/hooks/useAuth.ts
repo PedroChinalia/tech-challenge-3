@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export function useAuth() {
+    const router = useRouter();
     const [profile, setProfile] = useState<any>(null);
     const [token, setToken] = useState<string | null>(null);
 
@@ -32,6 +34,7 @@ export function useAuth() {
         localStorage.removeItem('token');
         setProfile(null);
         setToken(null);
+        router.push('/login');
     };
 
     return {

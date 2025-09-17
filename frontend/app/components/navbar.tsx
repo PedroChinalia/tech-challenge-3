@@ -1,6 +1,11 @@
+'use client'
+
 import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
+import { useAuth } from "../hooks/useAuth";
 
 const Navbar: React.FC = () => {
+  const { logout } = useAuth();
+
   return (
     <AppBar position="static" sx={{ backgroundColor: "#1976d2" }}>
       <Toolbar>
@@ -9,7 +14,7 @@ const Navbar: React.FC = () => {
         </Typography>
 
         <Box>
-          <Button variant="contained" color="error">
+          <Button variant="contained" color="error" onClick={logout}>
             Logout
           </Button>
         </Box>

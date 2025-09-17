@@ -1,6 +1,8 @@
+'use client'
 import Post from "./components/post";
 import Navbar from "./components/navbar";
 import { Typography, Box, Button } from "@mui/material";
+import { useAuth } from "./hooks/useAuth";
 import Link from "next/link";
 
 export default function Home() {
@@ -12,6 +14,8 @@ export default function Home() {
     author: "Pedro Chinalia",
     date: "09/09/2025"
   };
+
+  const { isAuthenticated, isTeacher } = useAuth();
 
   return (
     <>
@@ -28,7 +32,13 @@ export default function Home() {
             <Typography variant="h4" mb={4} mt={4}>
               Lista de postagens
             </Typography>
-            <Button variant="contained" color="success" component={Link} href="/createPostLayout">
+            <Button
+              variant="contained"
+              color="success"
+              component={Link}
+              href="/createPostLayout"
+              disabled={!isTeacher}
+            >
               Criar Postagem
             </Button>
           </Box>
