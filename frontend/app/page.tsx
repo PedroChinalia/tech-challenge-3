@@ -1,9 +1,10 @@
 'use client'
 import Post from "./components/post";
 import Navbar from "./components/navbar";
-import { Typography, Box, Button } from "@mui/material";
+import { Typography, Box, Button, Snackbar, Alert, AlertColor } from "@mui/material";
 import { useAuth } from "./hooks/useAuth";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import axios from "axios";
 
@@ -16,8 +17,22 @@ interface PostData {
 }
 
 export default function Home() {
+  const router = useRouter();
   const [data, setData] = useState<PostData[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: AlertColor }>({
+    open: false,
+    message: '',
+    severity: 'info',
+  });
+
+  const handleCloseSnackbar = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbar({ ...snackbar, open: false });
+  };
 
   const handleGetPosts = async () => {
     try {
@@ -34,7 +49,40 @@ export default function Home() {
     handleGetPosts();
   }, []);
 
-  const { isTeacher } = useAuth();
+  const { isTeacher, isAuthenticated } = useAuth();
+
+  useEffect(() => {
+    if (loading) return;
+    if (isAuthenticated === false) {
+      setSnackbar({ open: true, message: "Você precisa fazer login!", severity: 'error' });
+      setTimeout(() => {
+        router.push("/login");
+      }, 1300);
+    }
+  }, [isAuthenticated, loading, router]);
+
+  if (loading) {
+    return (
+      <div style={{ textAlign: 'center', marginTop: '50px' }}>
+        <Typography variant="h6">Carregando...</Typography>
+      </div>
+    );
+  }
+
+  if (isAuthenticated === false) {
+    return (
+      <>
+        <Snackbar open={snackbar.open} autoHideDuration={6000} onClose={handleCloseSnackbar} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+          <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: '100%' }}>
+            {snackbar.message}
+          </Alert>
+        </Snackbar>
+        <div style={{ textAlign: 'center', marginTop: '50px' }}>
+          <Typography variant="h6">Acesso negado. Redirecionando...</Typography>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
