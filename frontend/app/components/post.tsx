@@ -56,17 +56,22 @@ const Post: React.FC<PostProps> = (props) => {
             >
               <VisibilityIcon titleAccess="Ver postagem" />
             </IconButton>
-            <IconButton
-              aria-label="edit-post"
-              component={Link}
-              disabled={!isTeacher}
-              href={{ pathname: "/editPostLayout", query: { id, title, content } }}
-            >
-              <EditIcon titleAccess="Editar postagem" />
-            </IconButton>
-            <IconButton aria-label="delete-post" onClick={handleOpenDialog} disabled={!isTeacher}>
-              <DeleteIcon titleAccess="Excluir postagem" />
-            </IconButton>
+            {!isTeacher ? null : (
+              <>
+                <IconButton
+                  aria-label="edit-post"
+                  component={Link}
+                  disabled={!isTeacher}
+                  href={{ pathname: "/editPostLayout", query: { id, title, content } }}
+                >
+                  <EditIcon titleAccess="Editar postagem" />
+                </IconButton>
+                <IconButton aria-label="delete-post" onClick={handleOpenDialog} disabled={!isTeacher}>
+                  <DeleteIcon titleAccess="Excluir postagem" />
+                </IconButton>
+              </>
+            )}
+
           </Box>
         </Box>
         {/* Card body */}

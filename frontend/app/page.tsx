@@ -99,15 +99,16 @@ export default function Home() {
             <Typography variant="h4" mb={4} mt={4}>
               Lista de postagens
             </Typography>
-            <Button
-              variant="contained"
-              color="success"
-              component={Link}
-              href="/createPostLayout"
-              disabled={!isTeacher}
-            >
-              Criar Postagem
-            </Button>
+            {!isTeacher ? null : (  
+              <Button
+                variant="contained"
+                color="success"
+                component={Link}
+                href="/createPostLayout"
+              >
+                Criar Postagem
+              </Button>
+            )}
           </Box>
           <div>
             {loading ? (
