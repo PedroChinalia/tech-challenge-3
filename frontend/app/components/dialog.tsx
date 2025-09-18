@@ -6,17 +6,18 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Button
+  Button,
 } from "@mui/material";
 
 type CustomDialogProps = {
   open: boolean;
   onClose: () => void;
+  onConfirm: () => void;
   dialogContent: string;
 };
 
 const CustomDialog: React.FC<CustomDialogProps> = (props) => {
-  const { open, onClose, dialogContent } = props;
+  const { open, onClose, onConfirm, dialogContent } = props;
 
   return (
     <Dialog
@@ -31,7 +32,7 @@ const CustomDialog: React.FC<CustomDialogProps> = (props) => {
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cancelar</Button>
-        <Button onClick={onClose} autoFocus>
+        <Button onClick={onConfirm} autoFocus>
           Confirmar
         </Button>
       </DialogActions>

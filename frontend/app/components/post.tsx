@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useState } from "react";
 import CustomDialog from "./dialog";
 import { useAuth } from "../hooks/useAuth";
+import axios from "axios";
 
 type PostProps = {
   id: number;
@@ -26,7 +27,20 @@ const Post: React.FC<PostProps> = (props) => {
   const handleOpenDialog = () => setDialogIsOpen(true);
   const handleCloseDialog = () => setDialogIsOpen(false);
 
-  const { isTeacher } = useAuth();
+  const { isTeacher, token } = useAuth();
+
+  const handleDelete = async () => {
+    try {
+      await axios.delete(`https://tech-challenge-blog.onrender.com/posts/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      window.location.reload();
+    } catch (error) {
+      console.error("Erro ao excluir post:", error);
+    }
+  };
 
   return (
     <Card sx={{ marginTop: 2, marginBottom: 2, width: "50vw", padding: 2 }}>
@@ -69,6 +83,7 @@ const Post: React.FC<PostProps> = (props) => {
       <CustomDialog
         open={dialogIsOpen}
         onClose={handleCloseDialog}
+        onConfirm={handleDelete}
         dialogContent={dialogContent}
       ></CustomDialog>
     </Card>
