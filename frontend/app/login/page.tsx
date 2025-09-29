@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { Typography, TextField, Box, Button, Snackbar, Alert, AlertColor } from "@mui/material";
 import { useState } from "react";
@@ -8,19 +8,24 @@ import axios from "axios";
 import Link from "next/link";
 
 const Login: React.FC = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
   const { fetchProfile } = useAuth();
 
-  const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: AlertColor }>({
+  const [snackbar, setSnackbar] = useState<{
+    open: boolean;
+    message: string;
+    severity: AlertColor;
+  }>({
     open: false,
-    message: '',
-    severity: 'info',
+    message: "",
+    severity: "info"
   });
 
   const handleCloseSnackbar = (event?: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
     setSnackbar({ ...snackbar, open: false });
@@ -29,7 +34,9 @@ const Login: React.FC = () => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      const { data } = await axios.post('https://tech-challenge-blog.onrender.com/auth/login', {
+      setIsLoading(true);
+
+      const { data } = await axios.post("https://tech-challenge-blog.onrender.com/auth/login", {
         email,
         password
       });
@@ -39,27 +46,18 @@ const Login: React.FC = () => {
 
       await fetchProfile(token);
 
-      // const profileResponse = await axios.get('https://tech-challenge-blog.onrender.com/auth/me', {
-      //   headers: {
-      //     Authorization: `Bearer ${token}`
-      //   }
-      // });
-
-      // const userWithProfile = {
-      //   ...profileResponse.data
-      // };
-
-      // localStorage.setItem('token', token);
-      // localStorage.setItem('user', JSON.stringify(userWithProfile));
-
+      setIsLoading(false);
       router.push("/");
-
     } catch (error) {
+      setIsLoading(false);
       console.error("Erro no login:", error);
-      setSnackbar({ open: true, message: "Erro ao realizar login. Verifique os dados e tente novamente.", severity: 'error' });
+      setSnackbar({
+        open: true,
+        message: "Erro ao realizar login. Verifique os dados e tente novamente.",
+        severity: "error"
+      });
     }
-  }
-
+  };
 
   return (
     <div className="container">
@@ -67,7 +65,15 @@ const Login: React.FC = () => {
         <Typography variant="h4" mb={4}>
           Blog Escolar
         </Typography>
-        <Box sx={{ backgroundColor: "#fff", p: 3, borderRadius: 2, boxShadow: 3, width: "25vw" }}>
+        <Box
+          sx={{
+            backgroundColor: "#fff",
+            p: 3,
+            borderRadius: 2,
+            boxShadow: 3,
+            width: { md: "25vw", sm: "60vw" }
+          }}
+        >
           <form onSubmit={handleSubmit}>
             <Typography variant="h5" mb={2}>
               Login
@@ -93,7 +99,7 @@ const Login: React.FC = () => {
               />
             </Box>
             <Box display="flex" alignItems="center" justifyContent="space-between" gap={2}>
-              <Button variant="contained" type="submit">
+              <Button variant="contained" type="submit" loading={isLoading}>
                 Entrar
               </Button>
               <Button variant="contained" color="success" component={Link} href="/register">
@@ -103,8 +109,13 @@ const Login: React.FC = () => {
           </form>
         </Box>
       </div>
-      <Snackbar open={snackbar.open} autoHideDuration={6000} onClose={handleCloseSnackbar} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
-        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: '100%' }}>
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: "100%" }}>
           {snackbar.message}
         </Alert>
       </Snackbar>

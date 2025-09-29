@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import Post from "./components/post";
 import Navbar from "./components/navbar";
 import { Typography, Box, Button, Snackbar, Alert, AlertColor } from "@mui/material";
@@ -21,14 +21,18 @@ export default function Home() {
   const [data, setData] = useState<PostData[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: AlertColor }>({
+  const [snackbar, setSnackbar] = useState<{
+    open: boolean;
+    message: string;
+    severity: AlertColor;
+  }>({
     open: false,
-    message: '',
-    severity: 'info',
+    message: "",
+    severity: "info"
   });
 
   const handleCloseSnackbar = (event?: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
     setSnackbar({ ...snackbar, open: false });
@@ -54,7 +58,7 @@ export default function Home() {
   useEffect(() => {
     if (loading) return;
     if (isAuthenticated === false) {
-      setSnackbar({ open: true, message: "Você precisa fazer login!", severity: 'error' });
+      setSnackbar({ open: true, message: "Você precisa fazer login!", severity: "error" });
       setTimeout(() => {
         router.push("/login");
       }, 1300);
@@ -63,7 +67,7 @@ export default function Home() {
 
   if (loading) {
     return (
-      <div style={{ textAlign: 'center', marginTop: '50px' }}>
+      <div style={{ textAlign: "center", marginTop: "50px" }}>
         <Typography variant="h6">Carregando...</Typography>
       </div>
     );
@@ -72,12 +76,17 @@ export default function Home() {
   if (isAuthenticated === false) {
     return (
       <>
-        <Snackbar open={snackbar.open} autoHideDuration={6000} onClose={handleCloseSnackbar} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
-          <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: '100%' }}>
+        <Snackbar
+          open={snackbar.open}
+          autoHideDuration={6000}
+          onClose={handleCloseSnackbar}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: "100%" }}>
             {snackbar.message}
           </Alert>
         </Snackbar>
-        <div style={{ textAlign: 'center', marginTop: '50px' }}>
+        <div style={{ textAlign: "center", marginTop: "50px" }}>
           <Typography variant="h6">Acesso negado. Redirecionando...</Typography>
         </div>
       </>
@@ -91,7 +100,7 @@ export default function Home() {
         <div>
           <Box
             sx={{
-              display: "flex",
+              display: { md: "flex", sm: "block" },
               justifyContent: "space-between",
               alignItems: "center"
             }}
@@ -99,13 +108,8 @@ export default function Home() {
             <Typography variant="h4" mb={4} mt={4}>
               Lista de postagens
             </Typography>
-            {!isTeacher ? null : (  
-              <Button
-                variant="contained"
-                color="success"
-                component={Link}
-                href="/createPostLayout"
-              >
+            {!isTeacher ? null : (
+              <Button variant="contained" color="success" component={Link} href="/createPostLayout">
                 Criar Postagem
               </Button>
             )}
@@ -121,7 +125,8 @@ export default function Home() {
                   title={card.title}
                   content={card.content}
                   author={card.author}
-                  date={card.created_at.split('T')[0]} />
+                  date={card.created_at.split("T")[0]}
+                />
               ))
             ) : (
               <Typography>Nenhum post encontrado.</Typography>

@@ -21,13 +21,17 @@ const EditPostLayout: React.FC = () => {
   const [title, setTitle] = useState(initialTitle);
   const [content, setContent] = useState(initialContent);
 
-  const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: AlertColor }>({
+  const [snackbar, setSnackbar] = useState<{
+    open: boolean;
+    message: string;
+    severity: AlertColor;
+  }>({
     open: false,
-    message: '',
-    severity: 'info',
+    message: "",
+    severity: "info"
   });
   const handleCloseSnackbar = (event?: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
     setSnackbar({ ...snackbar, open: false });
@@ -37,22 +41,28 @@ const EditPostLayout: React.FC = () => {
     event.preventDefault();
 
     try {
-      await axios.put(`https://tech-challenge-blog.onrender.com/posts/${id}`, {
-        title: title,
-        content: content,
-        author: autor,
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`
+      await axios.put(
+        `https://tech-challenge-blog.onrender.com/posts/${id}`,
+        {
+          title: title,
+          content: content,
+          author: autor
         },
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
 
-      setSnackbar({ open: true, message: "Post atualizado com sucesso!", severity: 'success' });
-
-
+      setSnackbar({ open: true, message: "Post atualizado com sucesso!", severity: "success" });
     } catch (error) {
       console.error("Erro ao realizar atualização do post:", error);
-      setSnackbar({ open: true, message: "Ops! Erro ao atualizar o post. Tente novamente.", severity: 'error' });
+      setSnackbar({
+        open: true,
+        message: "Ops! Erro ao atualizar o post. Tente novamente.",
+        severity: "error"
+      });
     }
   };
 
@@ -61,7 +71,16 @@ const EditPostLayout: React.FC = () => {
       <Navbar />
       <div className="container">
         <div>
-          <Typography variant="h4" mb={4}>
+          <Typography
+            variant={"h4"}
+            sx={(theme) => ({
+              [theme.breakpoints.down("sm")]: {
+                fontSize: theme.typography.h5.fontSize
+              }
+            })}
+            mb={5}
+            mt={5}
+          >
             Editar postagem {id}
           </Typography>
           <Box
@@ -70,7 +89,7 @@ const EditPostLayout: React.FC = () => {
               p: 3,
               borderRadius: 2,
               boxShadow: 3,
-              width: "50vw",
+              width: { md: "50vw", sm: "70" }
             }}
           >
             <form onSubmit={handleSubmit}>
@@ -109,8 +128,13 @@ const EditPostLayout: React.FC = () => {
             </form>
           </Box>
         </div>
-        <Snackbar open={snackbar.open} autoHideDuration={6000} onClose={handleCloseSnackbar} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
-          <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: '100%' }}>
+        <Snackbar
+          open={snackbar.open}
+          autoHideDuration={6000}
+          onClose={handleCloseSnackbar}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: "100%" }}>
             {snackbar.message}
           </Alert>
         </Snackbar>

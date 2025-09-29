@@ -33,8 +33,8 @@ const Post: React.FC<PostProps> = (props) => {
     try {
       await axios.delete(`https://tech-challenge-blog.onrender.com/posts/${id}`, {
         headers: {
-          Authorization: `Bearer ${token}`,
-        },
+          Authorization: `Bearer ${token}`
+        }
       });
       window.location.reload();
     } catch (error) {
@@ -43,7 +43,7 @@ const Post: React.FC<PostProps> = (props) => {
   };
 
   return (
-    <Card sx={{ marginTop: 2, marginBottom: 2, width: "50vw", padding: 2 }}>
+    <Card sx={{ marginTop: 2, marginBottom: 2, width: { md: "50vw", sm: "70vw" }, padding: 2 }}>
       <CardContent>
         {/* Card header */}
         <Box sx={{ display: "flex", justifyContent: "space-between", marginBottom: 2 }}>
@@ -66,17 +66,20 @@ const Post: React.FC<PostProps> = (props) => {
                 >
                   <EditIcon titleAccess="Editar postagem" />
                 </IconButton>
-                <IconButton aria-label="delete-post" onClick={handleOpenDialog} disabled={!isTeacher}>
+                <IconButton
+                  aria-label="delete-post"
+                  onClick={handleOpenDialog}
+                  disabled={!isTeacher}
+                >
                   <DeleteIcon titleAccess="Excluir postagem" />
                 </IconButton>
               </>
             )}
-
           </Box>
         </Box>
         {/* Card body */}
         <Typography mb={2}>{content}</Typography>
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+        <Box sx={{ display: { md: "flex", sm: "block" }, justifyContent: "space-between" }}>
           <Typography>
             <strong>Autor:</strong> {author}
           </Typography>
