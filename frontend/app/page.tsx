@@ -93,6 +93,8 @@ export default function Home() {
     );
   }
 
+  const width = data.length ? "auto" : { md: "40vw" };
+
   return (
     <>
       <Navbar />
@@ -102,7 +104,8 @@ export default function Home() {
             sx={{
               display: { md: "flex", sm: "block" },
               justifyContent: "space-between",
-              alignItems: "center"
+              alignItems: "center",
+              width: width
             }}
           >
             <Typography variant="h4" mb={4} mt={4}>
@@ -129,7 +132,7 @@ export default function Home() {
                 />
               ))
             ) : (
-              <Typography>Nenhum post encontrado.</Typography>
+              <Typography mt={2}>Nenhum post encontrado.</Typography>
             )}
           </div>
         </div>
