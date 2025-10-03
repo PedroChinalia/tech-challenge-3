@@ -4,11 +4,11 @@ import Navbar from "../components/navbar";
 import { Box, TextField, Typography, Button, Snackbar, Alert, AlertColor } from "@mui/material";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { useAuth } from "../hooks/useAuth";
 import axios from "axios";
 
-const EditPostLayout: React.FC = () => {
+const EditForm: React.FC = () => {
   const searchParams = useSearchParams();
   const { profile, token, isTeacher } = useAuth();
   const autor = profile?.name;
@@ -66,6 +66,72 @@ const EditPostLayout: React.FC = () => {
     }
   };
 
+  return (
+    <div className="container">
+      <div>
+        <Typography variant="h4" mb={4}>
+          Editar postagem {id}
+        </Typography>
+        <Box
+          sx={{
+            backgroundColor: "#fff",
+            p: 3,
+            borderRadius: 2,
+            boxShadow: 3,
+            width: "50vw"
+          }}
+        >
+          <form onSubmit={handleSubmit}>
+            <Box sx={{ marginBottom: 2 }}>
+              <TextField
+                id="post-title"
+                label="Título"
+                variant="outlined"
+                type="text"
+                required
+                fullWidth
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </Box>
+            <Box sx={{ marginBottom: 3 }}>
+              <TextField
+                id="post-content"
+                label="Conteúdo"
+                multiline
+                rows={4}
+                required
+                fullWidth
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+              />
+            </Box>
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+              <Button component={Link} href="/">
+                Voltar
+              </Button>
+              <Button variant="contained" color="success" type="submit">
+                Editar
+              </Button>
+            </Box>
+          </form>
+        </Box>
+      </div>
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: "100%" }}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
+    </div>
+  );
+};
+
+const EditPostLayout: React.FC = () => {
   return (
     <>
       <Navbar />
@@ -139,6 +205,9 @@ const EditPostLayout: React.FC = () => {
           </Alert>
         </Snackbar>
       </div>
+      <Suspense fallback={<div>Carregando...</div>}>
+        <EditForm />
+      </Suspense>
     </>
   );
 };
